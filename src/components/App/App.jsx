@@ -31,7 +31,9 @@ function App() {
         const { hits, total } = await FetchApi({ newName, page });
         if (newName === '' || total === 0) {
           setStatus('reject');
+          setError(true);
           toast.info(`По вашему запросу ничего не найденно ${newName}`);
+          console.log(error);
         } else {
           setData(prevData => (page > 1 ? [...prevData, ...hits] : [...hits]));
           setStatus('resolve');
@@ -49,7 +51,7 @@ function App() {
       setStatus('pending');
       fetchApi();
     }
-  }, [newName, page]);
+  }, [error, newName, page]);
 
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
