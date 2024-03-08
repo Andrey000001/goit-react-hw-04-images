@@ -25,7 +25,6 @@ function App() {
     setUrl(url);
     setShowModal(true);
   };
-
   useEffect(() => {
     const fetchApi = async () => {
       try {
