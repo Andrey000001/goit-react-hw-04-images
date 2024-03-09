@@ -21,6 +21,7 @@ function App() {
 
   const prevName = useRef(newName);
   const prevPage = useRef(page);
+
   const getLargeImg = url => {
     setUrl(url);
     setShowModal(true);
@@ -48,6 +49,7 @@ function App() {
     };
 
     if (newName !== prevName.current || page !== prevPage.current) {
+      setPage(1);
       setStatus('pending');
       fetchApi();
     }
