@@ -38,6 +38,7 @@ function App() {
         }
       } catch {
         setStatus('reject');
+        setError(error);
         console.error(error);
       }
     };
