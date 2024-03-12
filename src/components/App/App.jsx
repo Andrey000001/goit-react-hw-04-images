@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
@@ -19,41 +19,32 @@ function App() {
   const [url, setUrl] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const prevName = useRef(newName);
-  const prevPage = useRef(page);
-
   const getLargeImg = url => {
     setUrl(url);
     setShowModal(true);
   };
+
   useEffect(() => {
-    const fetchApi = async () => {
+    const fetchData = async () => {
+      const { hits, total } = await FetchApi({ page, newName });
       try {
-        const { hits, total } = await FetchApi({ newName, page });
         if (newName === '' || total === 0) {
+          toast.info(`По вашему запросу ${newName} ничего не найденно`);
           setStatus('reject');
-          setError(true);
-          toast.info(`По вашему запросу ничего не найденно ${newName}`);
-          console.log(error);
         } else {
           setData(prevData => (page > 1 ? [...prevData, ...hits] : [...hits]));
           setStatus('resolve');
+          toast.success(`По вашему запросу найденно ${total}`);
         }
-        prevName.current = newName;
-        prevPage.current = page;
-      } catch (error) {
-        setError(true);
+      } catch {
         setStatus('reject');
-        console.log(error);
+        console.error(error);
       }
     };
-
-    if (newName !== prevName.current || page !== prevPage.current) {
-      setPage(1);
-      setStatus('pending');
-      fetchApi();
+    if (page && newName) {
+      fetchData();
     }
-  }, [error, newName, page]);
+  }, [page, newName, error]);
 
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
@@ -63,6 +54,7 @@ function App() {
   };
   const updateName = newName => {
     setNewName(newName);
+    setPage(1);
     setData([]);
   };
 
