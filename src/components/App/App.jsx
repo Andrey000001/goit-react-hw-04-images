@@ -28,7 +28,7 @@ function App() {
     const fetchData = async () => {
       const { hits, total } = await FetchApi({ page, newName });
       try {
-        if (newName === '' || total === 0) {
+        if (!total) {
           toast.info(`По вашему запросу ${newName} ничего не найденно`);
           setStatus('reject');
         } else {
@@ -54,9 +54,14 @@ function App() {
     setShowModal(false);
   };
   const updateName = newName => {
-    setNewName(newName);
-    setPage(1);
-    setData([]);
+    if (newName === '') {
+      toast.info('Вы ничего не ввели!');
+      return;
+    } else {
+      setNewName(newName);
+      setPage(1);
+      setData([]);
+    }
   };
 
   return (
