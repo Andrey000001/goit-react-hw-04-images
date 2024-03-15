@@ -26,6 +26,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setStatus('pending');
       const { hits, total } = await FetchApi({ page, newName });
       try {
         if (!total) {
